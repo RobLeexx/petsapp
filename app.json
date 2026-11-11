@@ -1,0 +1,15 @@
+{
+  "expo": {
+    "name": "PetSteps",
+    "slug": "petsteps",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "petsteps",
+    "userInterfaceStyle": "light",
+    "android": {
+      "package": "com.petsteps.demo",
+      "predictiveBackGestureEnabled": false
+    },
+    "plugins": ["expo-router", "expo-splash-screen"]
+  }
+}
