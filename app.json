@@ -10,6 +10,9 @@
       "package": "com.petsteps.demo",
       "predictiveBackGestureEnabled": false
     },
-    "plugins": ["expo-router", "expo-splash-screen"]
+    "plugins": [
+      "expo-router",
+      ["expo-splash-screen", { "backgroundColor": "#E3F4F5", "imageWidth": 80 }]
+    ]
   }
 }

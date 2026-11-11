@@ -24,7 +24,7 @@ export default function ChildrenOverviewScreen() {
 
       <View style={styles.hero}>
         <View style={styles.heroIcon}><Ionicons name={pet ? 'paw' : 'sparkles-outline'} size={31} color={colors.tealDark} /></View>
-        <View style={styles.heroCopy}><Text style={styles.name}>{child.nickname}</Text><Text style={typography.body}>{pet ? pet.name : 'Pendiente de elegir su primera mascota'}</Text></View>
+        <View style={styles.heroCopy}><Text style={styles.name}>{child.nickname}</Text><Text style={typography.body}>{pet ? `${pet.name} · ${child.evolutionStage ?? 'Cría'}` : 'Pendiente de elegir su primera mascota'}</Text></View>
         <View style={styles.level}><Text style={styles.levelValue}>{child.level}</Text><Text style={styles.levelLabel}>nivel</Text></View>
       </View>
 
@@ -33,6 +33,7 @@ export default function ChildrenOverviewScreen() {
         <View style={styles.metric}><Text style={styles.metricValue}>{child.completedChallengesToday}</Text><Text style={styles.metricLabel}>Retos hoy</Text></View>
         <View style={styles.metric}><Text style={styles.metricValue}>{child.streakDays}</Text><Text style={styles.metricLabel}>Racha</Text></View>
       </View>
+      <View style={styles.activityBanner}><Ionicons name="fitness" size={21} color={colors.tealDark} /><Text style={styles.activityText}>{child.totalActivityMinutes ?? 0} minutos de actividad acumulada · {child.dailyAwardedPoints ?? 0} puntos hoy</Text></View>
 
       <View style={styles.chartCard}><SectionHeading title="Últimos 7 días" /><WeeklyChart profile={child} /></View>
 
@@ -62,6 +63,8 @@ const styles = StyleSheet.create({
   levelValue: { color: colors.tealDark, fontSize: 24, ...roundedFont },
   levelLabel: { color: colors.muted, fontSize: 10, fontWeight: '800' },
   metrics: { flexDirection: 'row', gap: 9, marginTop: spacing.md },
+  activityBanner: { marginTop: spacing.sm, backgroundColor: colors.blue, borderRadius: radius.md, padding: 12, flexDirection: 'row', alignItems: 'center', gap: 8 },
+  activityText: { flex: 1, color: colors.tealDark, fontSize: 11, fontWeight: '800' },
   metric: { flex: 1, backgroundColor: colors.white, borderRadius: radius.md, paddingVertical: 16, alignItems: 'center', ...shadow },
   metricValue: { color: colors.brown, fontSize: 19, ...roundedFont },
   metricLabel: { color: colors.muted, fontSize: 10, fontWeight: '700', marginTop: 2 },

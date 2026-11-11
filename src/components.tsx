@@ -16,6 +16,7 @@ import {
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
+  cancelAnimation,
   withDelay,
   withRepeat,
   withSequence,
@@ -43,7 +44,7 @@ export function Screen({ children, contentStyle }: PropsWithChildren<{ contentSt
 
   return (
     <SafeAreaView style={styles.safe} edges={['top', 'left', 'right']}>
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={[styles.screen, contentStyle]}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={[styles.screen, contentStyle]} keyboardShouldPersistTaps="handled">
         <Animated.View style={animatedStyle}>{children}</Animated.View>
       </ScrollView>
     </SafeAreaView>
@@ -105,6 +106,7 @@ export function FloatingPet({ index, size = 230, label }: { index: number; size?
   const translateY = useSharedValue(0);
   useEffect(() => {
     translateY.value = withRepeat(withSequence(withTiming(-7, { duration: 1700 }), withTiming(0, { duration: 1700 })), -1);
+    return () => cancelAnimation(translateY);
   }, [translateY]);
   const animatedStyle = useAnimatedStyle(() => ({ transform: [{ translateY: translateY.value }] }));
   return <Animated.View style={animatedStyle}><SpriteImage kind="pet" index={index} size={size} label={label} /></Animated.View>;
@@ -153,12 +155,19 @@ export function WeeklyChart({ profile }: { profile: ChildProfile }) {
       {data.map((day) => (
         <View key={day.label} style={styles.chartColumn}>
           <Text style={styles.chartValue}>{day.steps >= 1000 ? `${(day.steps / 1000).toFixed(1)}k` : day.steps}</Text>
-          <View style={styles.chartTrack}><View style={[styles.chartBar, { height: `${Math.max(day.percent, day.steps ? 8 : 2)}%` }]} /></View>
+          <View style={styles.chartTrack}><WeeklyBar percent={Math.max(day.percent, day.steps ? 8 : 2)} /></View>
           <Text style={styles.chartLabel}>{day.label}</Text>
         </View>
       ))}
     </View>
   );
+}
+
+function WeeklyBar({ percent }: { percent: number }) {
+  const height = useSharedValue(2);
+  useEffect(() => { height.value = withTiming(percent, { duration: 550 }); }, [height, percent]);
+  const animatedStyle = useAnimatedStyle(() => ({ height: `${height.value}%` }));
+  return <Animated.View style={[styles.chartBar, animatedStyle]} />;
 }
 
 export function ProfileSummary({ profile, onPress }: { profile: ChildProfile; onPress?: () => void }) {
@@ -189,7 +198,7 @@ export const typography = StyleSheet.create({
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.cream },
-  screen: { paddingHorizontal: spacing.md, paddingBottom: spacing.xl, flexGrow: 1 },
+  screen: { paddingHorizontal: 20, paddingTop: spacing.sm, paddingBottom: spacing.xxl, flexGrow: 1 },
   pressable: { flex: 1 },
   progressTrack: { width: '100%', borderRadius: radius.pill, backgroundColor: '#EAE3DA', overflow: 'hidden' },
   progressFill: { height: '100%', borderRadius: radius.pill },

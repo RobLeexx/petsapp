@@ -9,10 +9,10 @@ import { colors, radius, roundedFont, shadow, spacing } from '@/theme';
 import { router } from 'expo-router';
 
 export default function ChallengesScreen() {
-  const { currentProfile } = useApp();
+  const { currentProfile, completeChallenge } = useApp();
   const [selected, setSelected] = useState<Challenge | null>(null);
   if (currentProfile?.role !== 'child') return null;
-  const completedIds = currentProfile.id === 'kid_progress' ? challenges.slice(0, 3).map((challenge) => challenge.id) : [];
+  const completedIds = currentProfile.completedChallengeIds ?? [];
 
   return (
     <Screen>
@@ -20,8 +20,9 @@ export default function ChallengesScreen() {
       <Text style={[typography.subtitle, styles.intro]}>Pequeñas aventuras para moverte, divertirte y cuidar de ti.</Text>
       <View style={styles.summary}>
         <View style={styles.summaryIcon}><Ionicons name="flag" size={28} color={colors.coral} /></View>
-        <View style={styles.summaryCopy}><Text style={styles.summaryTitle}>{currentProfile.completedChallengesToday} de {currentProfile.dailyChallengesGoal} completados</Text><Text style={typography.body}>{currentProfile.completedChallengesToday === 3 ? '¡Misión del día conseguida!' : 'Elige un reto para conocerlo.'}</Text></View>
+        <View style={styles.summaryCopy}><Text style={styles.summaryTitle}>{currentProfile.completedChallengesToday} retos completados</Text><Text style={typography.body}>{currentProfile.completedChallengesToday >= currentProfile.dailyChallengesGoal ? '¡Misión del día conseguida! Puedes probar retos especiales.' : `Completa ${currentProfile.dailyChallengesGoal} para lograr la misión diaria.`}</Text></View>
       </View>
+      <View style={styles.points}><Ionicons name="star" size={18} color={colors.yellow} /><Text style={styles.pointsText}>{currentProfile.dailyAwardedPoints ?? 0} puntos ganados hoy</Text></View>
       <View style={styles.list}>
         {challenges.map((challenge) => {
           const completed = completedIds.includes(challenge.id);
@@ -37,7 +38,7 @@ export default function ChallengesScreen() {
 
       <Modal visible={Boolean(selected)} transparent animationType="fade" onRequestClose={() => setSelected(null)}>
         <Pressable style={styles.backdrop} onPress={() => setSelected(null)}>
-          {selected && <Pressable style={styles.modal} onPress={() => {}}><View style={[styles.modalIcon, { backgroundColor: selected.color }]}><Ionicons name={selected.icon as keyof typeof Ionicons.glyphMap} size={44} color={colors.brown} /></View><Text style={styles.modalTitle}>{selected.name}</Text><Text style={[typography.subtitle, styles.modalText]}>{selected.description}</Text><Pill icon="star" text={`${selected.points} puntos al completarlo`} color="#FFF2C9" /><Text style={styles.stageNote}>En esta etapa los retos son informativos. No cambian tus pasos ni tu XP.</Text><Pressable onPress={() => setSelected(null)} style={styles.close}><Text style={styles.closeText}>Entendido</Text></Pressable></Pressable>}
+          {selected && <Pressable style={styles.modal} onPress={() => {}}><View style={[styles.modalIcon, { backgroundColor: selected.color }]}><Ionicons name={selected.icon as keyof typeof Ionicons.glyphMap} size={44} color={colors.brown} /></View><Text style={styles.modalTitle}>{selected.name}</Text><Text style={[typography.subtitle, styles.modalText]}>{selected.description}</Text><Pill icon="star" text={`${selected.points} puntos al completarlo`} color="#FFF2C9" />{completedIds.includes(selected.id) ? <View style={styles.done}><Ionicons name="checkmark-circle" size={20} color={colors.green} /><Text style={styles.doneText}>Reto completado hoy</Text></View> : <Pressable onPress={() => { completeChallenge(selected.id, currentProfile.id); setSelected(null); }} style={styles.complete}><Text style={styles.completeText}>Marcar como completado</Text></Pressable>}<Pressable onPress={() => setSelected(null)} style={styles.close}><Text style={styles.closeText}>Cerrar</Text></Pressable></Pressable>}
         </Pressable>
       </Modal>
     </Screen>
@@ -51,6 +52,8 @@ const styles = StyleSheet.create({
   summaryIcon: { width: 52, height: 52, backgroundColor: colors.white, borderRadius: 17, alignItems: 'center', justifyContent: 'center' },
   summaryCopy: { flex: 1 },
   summaryTitle: { color: colors.brown, fontSize: 16, ...roundedFont },
+  points: { flexDirection: 'row', gap: 6, alignItems: 'center', alignSelf: 'flex-start', marginTop: spacing.md, backgroundColor: colors.white, borderRadius: radius.pill, paddingHorizontal: 11, paddingVertical: 7 },
+  pointsText: { color: colors.brown, fontSize: 12, fontWeight: '800' },
   list: { gap: 12, marginTop: spacing.md },
   card: { minHeight: 130, backgroundColor: colors.white, borderRadius: radius.md, padding: 13, flexDirection: 'row', alignItems: 'center', gap: 12, ...shadow },
   icon: { width: 62, height: 62, borderRadius: 21, alignItems: 'center', justifyContent: 'center' },
@@ -62,7 +65,10 @@ const styles = StyleSheet.create({
   modalIcon: { width: 84, height: 84, borderRadius: 28, alignItems: 'center', justifyContent: 'center', marginBottom: spacing.md },
   modalTitle: { color: colors.brown, fontSize: 23, textAlign: 'center', ...roundedFont },
   modalText: { textAlign: 'center', marginVertical: spacing.sm },
-  stageNote: { color: colors.muted, textAlign: 'center', fontSize: 11, lineHeight: 16, marginTop: spacing.md },
+  complete: { marginTop: spacing.lg, backgroundColor: colors.teal, borderRadius: radius.pill, paddingHorizontal: 24, paddingVertical: 13 },
+  completeText: { color: colors.white, fontWeight: '900' },
+  done: { flexDirection: 'row', gap: 6, alignItems: 'center', marginTop: spacing.lg, backgroundColor: '#E4F4EB', borderRadius: radius.pill, paddingHorizontal: 14, paddingVertical: 9 },
+  doneText: { color: colors.green, fontWeight: '900' },
   close: { marginTop: spacing.md, backgroundColor: colors.teal, borderRadius: radius.pill, paddingHorizontal: 30, paddingVertical: 13 },
   closeText: { color: colors.white, fontWeight: '900' },
 });

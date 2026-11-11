@@ -25,12 +25,16 @@ export const accessories: Accessory[] = [
 ];
 
 export const challenges: Challenge[] = [
-  { id: 'morning_walk', name: 'Paseo matutino', description: 'Da un paseo corto para empezar el día con energía.', points: 40, icon: 'sunny', color: '#FFE7A3' },
-  { id: 'hydration', name: 'Héroe de la hidratación', description: 'Recuerda beber agua después de moverte.', points: 25, icon: 'water', color: '#DDF3FB' },
-  { id: 'stairs', name: 'Sube escaleras', description: 'Elige las escaleras acompañado de un adulto.', points: 50, icon: 'trending-up', color: '#E6E0FA' },
-  { id: 'family_walk', name: 'Paseo en familia', description: 'Invita a tu familia a compartir una aventura.', points: 80, icon: 'people', color: '#FBDDD7' },
-  { id: 'outdoor_play', name: 'Juego al aire libre', description: 'Juega fuera durante unos minutos.', points: 60, icon: 'football', color: '#DDF2DD' },
-  { id: 'prepare_bag', name: 'Prepara tu mochila', description: 'Ten lista tu mochila para la próxima ruta.', points: 20, icon: 'bag-handle', color: '#FFE7C9' },
+  { id: 'morning_walk', name: 'Paseo matutino', description: 'Da un paseo corto para empezar el día con energía.', points: 15, icon: 'sunny', color: '#FFE7A3', category: 'outdoor' },
+  { id: 'hydration', name: 'Héroe de la hidratación', description: 'Recuerda beber agua después de moverte.', points: 10, icon: 'water', color: '#DDF3FB', associatedAccessoryId: 'hydration_bottle' },
+  { id: 'stairs', name: 'Sube escaleras', description: 'Elige las escaleras acompañado de un adulto.', points: 20, icon: 'trending-up', color: '#E6E0FA', category: 'sport' },
+  { id: 'family_walk', name: 'Paseo en familia', description: 'Invita a tu familia a compartir una aventura.', points: 20, icon: 'people', color: '#FBDDD7', category: 'outdoor', associatedAccessoryId: 'bow_tie' },
+  { id: 'outdoor_play', name: 'Juego al aire libre', description: 'Juega fuera durante unos minutos.', points: 15, icon: 'football', color: '#DDF2DD', category: 'outdoor' },
+  { id: 'prepare_bag', name: 'Prepara tu mochila', description: 'Ten lista tu mochila para la próxima ruta.', points: 10, icon: 'bag-handle', color: '#FFE7C9' },
+  { id: 'sunny_day', name: 'Aventura soleada', description: 'Disfruta de un juego tranquilo al aire libre.', points: 10, icon: 'partly-sunny', color: '#FFF0B8', category: 'outdoor', associatedAccessoryId: 'sunglasses', special: true },
+  { id: 'walk_school', name: 'Camino al cole', description: 'Simula un paseo acompañado hasta el cole.', points: 15, icon: 'school', color: '#DCEBFA', category: 'outdoor', associatedAccessoryId: 'sports_cap', special: true },
+  { id: 'winter_fun', name: 'Diversión de invierno', description: 'Imagina un juego activo en un día fresquito.', points: 10, icon: 'snow', color: '#E4F4FA', category: 'sport', associatedAccessoryId: 'warm_scarf', special: true },
+  { id: 'rainy_indoor', name: 'Día de lluvia', description: 'Muévete y juega dentro de casa.', points: 10, icon: 'rainy', color: '#E7E2FA', category: 'sport', associatedAccessoryId: 'rain_umbrella', special: true },
 ];
 
 const historyDates = ['2026-10-29', '2026-10-30', '2026-10-31', '2026-11-01', '2026-11-02', '2026-11-03', '2026-11-04', '2026-11-05', '2026-11-06', '2026-11-07', '2026-11-08', '2026-11-09', '2026-11-10', '2026-11-11'];

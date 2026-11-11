@@ -9,6 +9,8 @@ jest.mock('react-native-reanimated', () => {
     default: Animated,
     useSharedValue: (value) => ({ value }),
     useAnimatedStyle: (factory) => factory(),
+    Easing: { linear: (value) => value },
+    cancelAnimation: jest.fn(),
     withDelay: (_delay, value) => value,
     withRepeat: (value) => value,
     withSequence: (...values) => values.at(-1),

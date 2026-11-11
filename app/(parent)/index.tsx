@@ -28,11 +28,12 @@ export default function FamilyDashboardScreen() {
       {children.map((child) => <ProfileSummary key={child.id} profile={child} onPress={() => setSelectedId(child.id)} />)}
 
       <View style={styles.detailCard}>
-        <View style={styles.detailHeader}><View><Text style={styles.selectedName}>{selected.nickname}</Text><Text style={typography.body}>{pet ? `${pet.name} · Nivel ${selected.level}` : 'Aún no ha elegido mascota'}</Text></View><View style={styles.level}><Text style={styles.levelText}>Nvl. {selected.level}</Text></View></View>
+        <View style={styles.detailHeader}><View><Text style={styles.selectedName}>{selected.nickname}</Text><Text style={typography.body}>{pet ? `${pet.name} · ${selected.evolutionStage ?? 'Cría'}` : 'Aún no ha elegido mascota'}</Text></View><View style={styles.level}><Text style={styles.levelText}>Nvl. {selected.level}</Text></View></View>
         <View style={styles.goalRow}><Text style={styles.goalLabel}>Meta diaria</Text><Text style={styles.goalValue}>{selected.stepsToday.toLocaleString('es-ES')} / {selected.dailyStepGoal.toLocaleString('es-ES')} pasos</Text></View>
         <AnimatedProgressBar value={progressPercent(selected.stepsToday, selected.dailyStepGoal)} />
         <SectionHeading title="Actividad semanal" />
         <WeeklyChart profile={selected} />
+        <Text style={styles.activityTotal}>{selected.totalActivityMinutes ?? 0} minutos de actividad acumulada · {selected.dailyAwardedPoints ?? 0} puntos hoy</Text>
       </View>
 
       <View style={styles.metrics}>
@@ -64,6 +65,7 @@ const styles = StyleSheet.create({
   goalLabel: { color: colors.brown, fontWeight: '800' },
   goalValue: { color: colors.muted, fontSize: 12, fontWeight: '700' },
   metrics: { flexDirection: 'row', gap: 9, marginTop: spacing.md },
+  activityTotal: { color: colors.muted, fontSize: 11, fontWeight: '700', textAlign: 'center', marginTop: spacing.sm },
   metric: { flex: 1, minHeight: 110, backgroundColor: colors.white, borderRadius: radius.md, alignItems: 'center', justifyContent: 'center', ...shadow },
   metricValue: { color: colors.brown, fontSize: 19, marginTop: 4, ...roundedFont },
   metricLabel: { color: colors.muted, fontSize: 10, fontWeight: '700', textAlign: 'center' },

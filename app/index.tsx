@@ -1,10 +1,11 @@
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { PressableScale, Screen, SpriteImage, typography } from '@/components';
 import { useApp } from '@/context/AppContext';
 import { colors, radius, roundedFont, shadow, spacing } from '@/theme';
+import { PetStepsLoader } from '@/PetStepsLoader';
 
 const cards = [
   { id: 'kid_new', title: 'Comenzar desde cero', name: 'ZorroBravo32', description: 'Niño nuevo', icon: 'sparkles' as const, colors: ['#FFF1C9', '#FFE0C0'] as const },
@@ -22,7 +23,7 @@ export default function WelcomeScreen() {
     else router.push('/(child)');
   };
 
-  if (!hydrated) return <View style={styles.loading}><ActivityIndicator color={colors.teal} size="large" /></View>;
+  if (!hydrated) return <View style={styles.loading}><PetStepsLoader message="Preparando tu aventura..." /></View>;
 
   return (
     <Screen contentStyle={styles.screen}>
